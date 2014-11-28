@@ -1,0 +1,27 @@
+# Written by: Erick Cobos T (erick.cobos@epfl.ch)
+# Date: 17-03-2014
+
+# This commands use the Entrez API (an API that gives acces to the PUBMED database). This commands neeed to be run in the same folder as 
+# the esearch efetch and xtract scripts.
+# This is going to use the scripts efetch and xtract available to download from: ftp://ftp.ncbi.nih.gov/entrez/entrezdirect/ or the webpage
+# http://www.ncbi.nlm.nih.gov/books/NBK179288/ . You can also read that webpage to understand what the commands do.  Particularly section
+# "Getting started" and "Working with structured data".
+
+# This are working examples on how to use the commands to retrieve data from the Pubmed database.
+
+# Command 1:
+# This will print the list of PMID \t [DescriptorName]+ for articles 123 and 124. For example: 123	Gastritis	Bilirubin ...
+./esearch -db pubmed -query "eng[LANG] AND (123[UID] OR 124[UID])" |./efetch -format xml | ./xtract -pattern PubmedArticle -match MeshHeadingList -element MedlineCitation/PMID -group MeshHeading -element DescriptorName
+
+# Command 2:
+# This will print the pubmed PMID \t [DescriptorName [N|Y]+]+ for article 123 and 124 in the pubmed database. It could be used in a cycle to obtain
+# it for a subset of articles.
+./esearch -db pubmed -query "eng[LANG] AND (123[UID] OR 124[UID])" |./efetch -format xml | ./xtract -pattern PubmedArticle -match MeshHeadingList -element MedlineCitation/PMID -group MeshHeading -element DescriptorName -block MeshHeading -sep "" -element @MajorTopicYN >> PubmedXMeshTerms.tsv
+
+#Command 3: 
+# This generates a list of PMID \t [DescriptorName [N|Y]+]+. For example: 123	Gastritis	NNY	Bilirubin	N ...
+# Be sure to delete all contents from PubmedXMeshTerms.tsv beforehand
+./esearch -db pubmed -query "eng[LANG]" |./efetch -format xml| ./xtract -pattern PubmedArticle -match MeshHeadingList -element MedlineCitation/PMID -group MeshHeading -element DescriptorName -block MeshHeading -sep "" -element @MajorTopicYN >> PubmedXMeshTerms.tsv
+
+
+

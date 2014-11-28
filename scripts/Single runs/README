@@ -1,0 +1,5 @@
+Quirks of DCA(yet to add):
+Some/most of the options listed in the manual may not work or be difficult to may work, try to use only basic options. 
+Not a good thing to have tokens with count 0. They will still be assigned in the topic distribution.
+# of lines of the vocab has to be exactly equal to the number of features in the .cnf or when assigning words in word distribution per topics, the assignment won't be true. 
+
